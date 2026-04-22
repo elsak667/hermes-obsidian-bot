@@ -34,6 +34,24 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 
+def retry(max_attempts=3, delay=1):
+    """简单重试装饰器"""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    if attempt == max_attempts - 1:
+                        raise
+                    print(f"[重试] {func.__name__} 失败 (尝试 {attempt+1}/{max_attempts}): {e}")
+                    import time; time.sleep(delay)
+            return None
+        return wrapper
+    return decorator
+
+
+@retry(max_attempts=3, delay=2)
 def call_anthropic_api(base_url: str, api_key: str, model: str, prompt: str, max_tokens: int = 1024) -> str:
     """直接用 httpx 调用 Anthropic API"""
     import httpx
@@ -61,6 +79,7 @@ def call_anthropic_api(base_url: str, api_key: str, model: str, prompt: str, max
     return str(content)
 
 
+@retry(max_attempts=3, delay=2)
 def call_openai_api(base_url: str, api_key: str, model: str, prompt: str, max_tokens: int = 1024) -> str:
     """直接用 httpx 调用 OpenAI API"""
     import httpx
@@ -147,8 +166,6 @@ def ai_classify(text: str) -> dict:
             "action_items": [],
         }
 
-    client = get_ai_client()
-
     prompt = f"""你是一个意图分类助手。用户发来一条消息，请分析其意图并返回结构化结果。
 
 消息内容：{text}
@@ -179,12 +196,18 @@ def ai_classify(text: str) -> dict:
         else:
             raise ValueError(f"不支持的 AI Provider: {AI_PROVIDER}")
 
-        # 提取 JSON
+        # 提取并验证 JSON
         import re
         json_match = re.search(r'\{[\s\S]*\}', result_text)
         if json_match:
             result_text = json_match.group()
-        return json.loads(result_text)
+        result = json.loads(result_text)
+
+        # 验证必要字段
+        if "intent" not in result:
+            raise ValueError("AI 返回缺少 intent 字段")
+
+        return result
     except Exception as e:
         print(f"AI 分类失败: {e}")
         return {
