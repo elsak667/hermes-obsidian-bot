@@ -6,11 +6,7 @@ Hermes-Obsidian Bot
 
 import json
 import os
-from dotenv import load_dotenv
-
-load_dotenv()  # 加载 .env 环境变量
 import re
-import os
 import sys
 import datetime
 import hashlib
@@ -18,6 +14,8 @@ from pathlib import Path
 from typing import Optional
 
 import pytz
+from dotenv import load_dotenv
+load_dotenv()
 from lark_oapi import LogLevel
 from lark_oapi import Client
 from lark_oapi.api.im.v1 import *
@@ -27,7 +25,7 @@ import lark_oapi.ws.client as ws_client_module
 
 from config import (
     FEISHU_APP_ID, FEISHU_APP_SECRET, FEISHU_BOT_NAME,
-    VAULT_PATH, AI_PROVIDER, AI_API_KEY, AI_MODEL, AI_BASE_URL, DIRS
+    VAULT_PATH, AI_PROVIDER, AI_API_KEY, NVIDIA_API_KEY, AI_MODEL, AI_BASE_URL, DIRS
 )
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -52,6 +50,27 @@ def retry(max_attempts=3, delay=1):
 
 
 @retry(max_attempts=3, delay=2)
+def call_nvidia_api(base_url: str, api_key: str, model: str, prompt: str, max_tokens: int = 1024) -> str:
+    """调用 NVIDIA API（OpenAI 兼容格式）"""
+    import httpx
+
+    url = f"{base_url}/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "model": model,
+        "max_tokens": max_tokens,
+        "messages": [{"role": "user", "content": prompt}]
+    }
+
+    resp = httpx.post(url, headers=headers, json=payload, timeout=60)
+    resp.raise_for_status()
+    data = resp.json()
+    return data["choices"][0]["message"]["content"]
+
+
 def call_anthropic_api(base_url: str, api_key: str, model: str, prompt: str, max_tokens: int = 1024) -> str:
     """直接用 httpx 调用 Anthropic API"""
     import httpx
@@ -192,7 +211,9 @@ def ai_classify(text: str) -> dict:
 只返回 JSON，不要有其他内容。"""
 
     try:
-        if AI_PROVIDER == "anthropic":
+        if AI_PROVIDER == "nvidia":
+            result_text = call_nvidia_api(AI_BASE_URL, NVIDIA_API_KEY, AI_MODEL, prompt)
+        elif AI_PROVIDER == "anthropic":
             result_text = call_anthropic_api(AI_BASE_URL, AI_API_KEY, AI_MODEL, prompt)
         elif AI_PROVIDER == "openai":
             result_text = call_openai_api(AI_BASE_URL, AI_API_KEY, AI_MODEL, prompt)
@@ -341,7 +362,9 @@ def generate_weekly_report() -> str:
 请简洁地总结，不要废话。"""
 
         try:
-            if AI_PROVIDER == "anthropic":
+            if AI_PROVIDER == "nvidia":
+                report_content = call_nvidia_api(AI_BASE_URL, NVIDIA_API_KEY, AI_MODEL, prompt, max_tokens=2048)
+            elif AI_PROVIDER == "anthropic":
                 report_content = call_anthropic_api(AI_BASE_URL, AI_API_KEY, AI_MODEL, prompt, max_tokens=2048)
             elif AI_PROVIDER == "openai":
                 report_content = call_openai_api(AI_BASE_URL, AI_API_KEY, AI_MODEL, prompt, max_tokens=2048)
