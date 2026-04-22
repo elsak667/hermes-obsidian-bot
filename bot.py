@@ -30,6 +30,9 @@ from config import (
     VAULT_PATH, AI_PROVIDER, AI_API_KEY, AI_MODEL, AI_BASE_URL, DIRS
 )
 
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+
 
 def call_anthropic_api(base_url: str, api_key: str, model: str, prompt: str, max_tokens: int = 1024) -> str:
     """直接用 httpx 调用 Anthropic API"""
@@ -505,9 +508,19 @@ def main():
         .register_p2_im_message_receive_v1(on_message_receive)
         .build()
     )
-    print(f"[INFO] handler 注册完成, keys: {list(handler._processorMap.keys())}")
+    print("[INFO] handler 注册完成, keys: {list(handler._processorMap.keys())}")
 
-    # 启动 WebSocket 长连接
+    # 定时任务：每周日 20:00 生成周报
+    scheduler = BackgroundScheduler(timezone=pytz.timezone('Asia/Shanghai'))
+    scheduler.add_job(
+        generate_weekly_report,
+        CronTrigger(day_of_week='sun', hour=20, minute=0, timezone='Asia/Shanghai'),
+        id='weekly_report'
+    )
+    scheduler.start()
+    print("[INFO] 定时任务已启动: 每周日 20:00 生成周报")
+
+    # 启动 WebSocket 长连接（阻塞）
     ws_client = WSClient(
         app_id=FEISHU_APP_ID,
         app_secret=FEISHU_APP_SECRET,
@@ -515,8 +528,6 @@ def main():
     )
 
     print("等待飞书消息...")
-
-    # 启动（阻塞）
     ws_client.start()
 
 
