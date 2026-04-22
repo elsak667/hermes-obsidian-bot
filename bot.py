@@ -5,6 +5,10 @@ Hermes-Obsidian Bot
 """
 
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # 加载 .env 环境变量
 import re
 import os
 import sys
