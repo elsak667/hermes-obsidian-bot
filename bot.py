@@ -418,8 +418,22 @@ def save_state():
     """保存状态到文件"""
     import json
     state = {"user_chat_id": user_chat_id, "user_open_id": user_open_id}
-    with open("/Users/els/hermes-obsidian-bot/state.json", "w") as f:
+    with open(STATE_FILE, "w") as f:
         json.dump(state, f)
+
+
+def load_state():
+    """从文件加载状态"""
+    import json
+    global user_chat_id, user_open_id
+    if os.path.exists(STATE_FILE):
+        try:
+            with open(STATE_FILE, "r") as f:
+                state = json.load(f)
+                user_chat_id = state.get("user_chat_id")
+                user_open_id = state.get("user_open_id")
+        except Exception as e:
+            print(f"加载状态失败: {e}")
 
 
 def on_message_receive(data: P2ImMessageReceiveV1):
@@ -478,6 +492,7 @@ def main():
     print("=" * 50)
 
     ensure_dirs()
+    load_state()
 
     print(f"飞书应用: {FEISHU_APP_ID}")
     print(f"Vault: {VAULT_PATH}")
