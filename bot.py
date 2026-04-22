@@ -137,12 +137,15 @@ def detect_intent(text: str) -> str:
 def parse_reminder_time(text: str) -> Optional[str]:
     """从文本中解析提醒时间"""
     patterns = [
-        (r'明天(\d+)点', 1),
         (r'今天(\d+)点', 0),
+        (r'明天(\d+)点', 1),
+        (r'周二(\d+)点', 1),
+        (r'周三(\d+)点', 2),
+        (r'周四(\d+)点', 3),
+        (r'周五(\d+)点', 4),
+        (r'周六(\d+)点', 5),
         (r'周日(\d+)点', 6),
-        (r'周一(\d+)点', 1),
-        (r'周三(\d+)点', 3),
-        (r'周五(\d+)点', 5),
+        (r'周一(\d+)点', 7),
     ]
     now = datetime.datetime.now(pytz.timezone('Asia/Shanghai'))
     for pattern, days_offset in patterns:
@@ -353,16 +356,20 @@ def generate_weekly_report() -> str:
     return str(report_path)
 
 
-def build_reply_text(intent: str, ai_result: dict) -> str:
+def build_reply_text(intent: str, ai_result: dict, saved_path: str = None) -> str:
     """构建回复文本"""
+    path_tip = f"\n📄 {saved_path}" if saved_path else ""
+
     reply_map = {
-        "todo": "✅ 已记为待办",
+        "todo": f"✅ 已记为待办{path_tip}",
         "reminder": f"⏰ 提醒已设置（{ai_result.get('reminder_time', '时间待定')}）",
-        "idea": "💡 灵感已存入 ideas",
-        "journal": "📝 已存入今日笔记",
-        "project": "📁 已存入项目笔记",
+        "idea": f"💡 灵感已存入 ideas{path_tip}",
+        "journal": f"📝 已存入今日笔记{path_tip}",
+        "project": f"📁 已存入项目笔记{path_tip}",
+        "weekly_report": f"📊 周报已生成{path_tip}",
+        "view_weekly": f"📊 最新周报{path_tip}",
     }
-    return reply_map.get(intent, "📥 已收到")
+    return reply_map.get(intent, f"📥 已收到{path_tip}")
 
 
 # 创建飞书 API 客户端（用于发送消息）
@@ -477,6 +484,19 @@ def on_message_receive(data: P2ImMessageReceiveV1):
                 text = str(message.content)
 
         if not text:
+            return
+
+        # 特殊指令：查看周报
+        if text.strip() in ["查看周报", "周报", "看周报"]:
+            import glob
+            weekly_dir = get_vault_path("weekly")
+            reports = sorted(weekly_dir.glob("*.md"), key=lambda p: p.name, reverse=True)
+            if reports:
+                latest = reports[0]
+                reply_text = f"📊 最新周报：{latest.name}\n📄 {latest}"
+            else:
+                reply_text = "📊 暂无周报，请先让我记录一些内容"
+            send_reply(message.message_id, reply_text)
             return
 
         # 记录 chat_id 和 open_id（用于后续主动推送）
