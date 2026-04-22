@@ -1,0 +1,173 @@
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+等待飞书消息...
+[Lark] [2026-04-22 20:42:31,430] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631563049304968402&access_key=8389c4a2745f38099369ebc0824cc27d&service_id=33554678&ticket=50ce32ff-d8d6-4620-9c0a-8b4db02840e6 [conn_id=7631563049304968402]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+等待飞书消息...
+[Lark] [2026-04-22 20:44:53,633] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631563700503219398&access_key=5f075ac2b5913586156eeb19b61eeb10&service_id=33554678&ticket=dff2d644-3e51-4546-b201-d66ff3226599 [conn_id=7631563700503219398]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+等待飞书消息...
+[Lark] [2026-04-22 20:49:48,198] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631564956777647325&access_key=2da7802d011bdb3c85b5f5abf7eb9676&service_id=33554678&ticket=3f7f6f41-b1aa-4423-812a-7f17cecea986 [conn_id=7631564956777647325]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+等待飞书消息...
+[Lark] [2026-04-22 20:51:58,261] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631565498677562552&access_key=c4a523a84713b0f19022d7995e8b8938&service_id=33554678&ticket=6e79e6e9-ceb2-482b-9cf1-72e6dc6be50b [conn_id=7631565498677562552]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+等待飞书消息...
+[Lark] [2026-04-22 20:59:18,617] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631567387444022452&access_key=196ef68a4843217039dc53648ce1d4da&service_id=33554678&ticket=741261d0-d7c8-4f8d-941d-894ab0256a91 [conn_id=7631567387444022452]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+等待飞书消息...
+[Lark] [2026-04-22 20:59:54,728] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631567533557468363&access_key=cd6c0c460a77c1a1f3c7751f9ae8b5f3&service_id=33554678&ticket=1df471a0-071a-4faa-8bbe-7f474e58dd5f [conn_id=7631567533557468363]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+等待飞书消息...
+[Lark] [2026-04-22 21:06:21,785] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631569219688402117&access_key=1db64c6ca91f49ee99dcf964c2cfa095&service_id=33554678&ticket=fb58a665-6772-499f-b58a-2d5cdef754b8 [conn_id=7631569219688402117]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+[INFO] handler 注册完成, keys: ['p2.im.message.receive_v1']
+等待飞书消息...
+[Lark] [2026-04-22 21:08:22,824] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631569719690464477&access_key=d60d7dc3381d855dbb835fd8ee288e4a&service_id=33554678&ticket=95d38515-45c9-425e-b0e1-dc6ff8eb1760 [conn_id=7631569719690464477]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+[INFO] handler 注册完成, keys: ['p2.im.message.receive_v1']
+等待飞书消息...
+[Lark] [2026-04-22 21:27:39,363] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631574708635208908&access_key=119b0bd5da2d53596ab91ba0b308c89b&service_id=33554678&ticket=a848e64f-2f3b-4610-954c-dfeb87c8463a [conn_id=7631574708635208908]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+[INFO] handler 注册完成, keys: ['p2.im.message.receive_v1']
+等待飞书消息...
+[Lark] [2026-04-22 21:33:43,919] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631576257562332366&access_key=05820d50c7d60d4869ec466d4304f369&service_id=33554678&ticket=7008ed17-3769-4987-b9be-e832dcecd83b [conn_id=7631576257562332366]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+[INFO] handler 注册完成, keys: ['p2.im.message.receive_v1']
+等待飞书消息...
+[Lark] [2026-04-22 21:34:57,172] [ERROR] connect failed, err: timed out during opening handshake
+[Lark] [2026-04-22 21:35:14,251] [INFO] trying to reconnect for the 1st time
+[Lark] [2026-04-22 21:35:15,104] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631576645758209216&access_key=7f4e8457860e7d849c4f00212c9de7c9&service_id=33554678&ticket=b5fde52a-55a6-4761-995d-b134ad2ad52a [conn_id=7631576645758209216]
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+[INFO] handler 注册完成, keys: ['p2.im.message.receive_v1']
+等待飞书消息...
+[Lark] [2026-04-22 21:36:08,437] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631576893443493086&access_key=1f2cb9f3c8e338c021359c4f104c02f5&service_id=33554678&ticket=eadce7d2-5767-4d54-b5d3-bf0eeaf33cce [conn_id=7631576893443493086]
+[DEBUG] 收到事件: <lark_oapi.api.im.v1.model.p2_im_message_receive_v1.P2ImMessageReceiveV1 object at 0x10b084c20>
+已记录 chat_id: oc_e5a8ce7078ba09ff49f4bf4a8fcb25b0
+[None] 收到
+[DEBUG] sender: <lark_oapi.api.im.v1.model.event_sender.EventSender object at 0x10b041590>
+[DEBUG] message fields: ['builder', 'chat_id', 'chat_type', 'content', 'create_time', 'mentions', 'message_id', 'message_type', 'parent_id', 'root_id', 'thread_id', 'update_time', 'user_agent']
+AI 分类失败: 'tuple' object has no attribute 'messages'
+完成: journal → /Users/els/Documents/Obsidian Vault/daily/2026-04-22.md
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+[INFO] handler 注册完成, keys: ['p2.im.message.receive_v1']
+等待飞书消息...
+[Lark] [2026-04-22 21:37:46,271] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631577309669133494&access_key=bfb4107abb59947e86fd666dbf8dd131&service_id=33554678&ticket=ab9dbacc-49a1-47ae-ac4b-0a5c73ed1f60 [conn_id=7631577309669133494]
+[DEBUG] 收到事件: <lark_oapi.api.im.v1.model.p2_im_message_receive_v1.P2ImMessageReceiveV1 object at 0x10aedcc20>
+已记录 chat_id: oc_e5a8ce7078ba09ff49f4bf4a8fcb25b0
+[None] 确认收到
+[DEBUG] sender: <lark_oapi.api.im.v1.model.event_sender.EventSender object at 0x10ae99310>
+[DEBUG] message fields: ['builder', 'chat_id', 'chat_type', 'content', 'create_time', 'mentions', 'message_id', 'message_type', 'parent_id', 'root_id', 'thread_id', 'update_time', 'user_agent']
+==================================================
+Hermes-Obsidian Bot 启动中...
+==================================================
+飞书应用: cli_a96201337ff8dcbc
+Vault: /Users/els/Documents/Obsidian Vault/
+AI: anthropic / claude-sonnet-4-7-2025-06-09
+==================================================
+[INFO] handler 注册完成, keys: ['p2.im.message.receive_v1']
+等待飞书消息...
+[Lark] [2026-04-22 21:39:16,427] [INFO] connected to wss://msg-frontier.feishu.cn/ws/v2?fpid=493&aid=552564&device_id=7631577667843132605&access_key=11c936de0fe9a7a10c7b771cfa7e4644&service_id=33554678&ticket=8dbf9ffa-8e7f-4f53-bb72-15ebaf988cff [conn_id=7631577667843132605]
+[DEBUG] 收到事件: <lark_oapi.api.im.v1.model.p2_im_message_receive_v1.P2ImMessageReceiveV1 object at 0x112544c20>
+已记录 open_id: ou_ebae492b56eb252029730d5d277f588d
+[None] 确认收到
+[DEBUG] sender_id open_id: ou_ebae492b56eb252029730d5d277f588d
+[DEBUG] chat_id: oc_e5a8ce7078ba09ff49f4bf4a8fcb25b0
+AI 分类失败: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+完成: journal → /Users/els/Documents/Obsidian Vault/daily/2026-04-22.md
+[Lark] [2026-04-22 21:45:42,424] [ERROR] receive message loop exit, err: sent 1011 (internal error) keepalive ping timeout; no close frame received [conn_id=7631577667843132605]
+[Lark] [2026-04-22 21:45:42,939] [WARNING] ping failed, err: sent 1011 (internal error) keepalive ping timeout; no close frame received [conn_id=7631577667843132605]
+[Lark] [2026-04-22 22:00:06,923] [ERROR] connect failed, err: HTTPSConnectionPool(host='open.feishu.cn', port=443): Max retries exceeded with url: /callback/ws/endpoint (Caused by NameResolutionError("HTTPSConnection(host='open.feishu.cn', port=443): Failed to resolve 'open.feishu.cn' ([Errno 8] nodename nor servname provided, or not known)"))
+[DEBUG] 收到事件: <lark_oapi.api.im.v1.model.p2_im_message_receive_v1.P2ImMessageReceiveV1 object at 0x11274df90>
+已记录 open_id: ou_ebae492b56eb252029730d5d277f588d
+[None] 确认收到
+[DEBUG] sender_id open_id: ou_ebae492b56eb252029730d5d277f588d
+[DEBUG] chat_id: oc_e5a8ce7078ba09ff49f4bf4a8fcb25b0
+AI 分类失败: Client error '403 Forbidden' for url 'https://api.nengpa.com/anthropic/v1/messages'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+完成: journal → /Users/els/Documents/Obsidian Vault/daily/2026-04-22.md
+[DEBUG] 收到事件: <lark_oapi.api.im.v1.model.p2_im_message_receive_v1.P2ImMessageReceiveV1 object at 0x11274d950>
+已记录 open_id: ou_ebae492b56eb252029730d5d277f588d
+[None] 确认收到
+[DEBUG] sender_id open_id: ou_ebae492b56eb252029730d5d277f588d
+[DEBUG] chat_id: oc_e5a8ce7078ba09ff49f4bf4a8fcb25b0
+AI 分类失败: Client error '403 Forbidden' for url 'https://api.nengpa.com/anthropic/v1/messages'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+完成: journal → /Users/els/Documents/Obsidian Vault/daily/2026-04-22.md
