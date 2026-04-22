@@ -31,12 +31,6 @@ from config import (
 )
 
 
-def get_ai_client():
-    """创建 AI 客户端（直接用 httpx，不用 SDK）"""
-    # 返回 (provider, base_url, api_key) 元组，供 ai_classify 使用
-    return (AI_PROVIDER, AI_BASE_URL, AI_API_KEY)
-
-
 def call_anthropic_api(base_url: str, api_key: str, model: str, prompt: str, max_tokens: int = 1024) -> str:
     """直接用 httpx 调用 Anthropic API"""
     import httpx
@@ -83,64 +77,6 @@ def call_openai_api(base_url: str, api_key: str, model: str, prompt: str, max_to
     resp.raise_for_status()
     data = resp.json()
     return data["choices"][0]["message"]["content"]
-
-
-def ai_classify(text: str) -> dict:
-    """用 AI 精准理解消息意图"""
-    if not AI_API_KEY:
-        return {
-            "intent": detect_intent(text),
-            "summary": text[:50],
-            "tags": [],
-            "reminder_time": parse_reminder_time(text),
-            "action_items": [],
-        }
-
-    prompt = f"""你是一个意图分类助手。用户发来一条消息，请分析其意图并返回结构化结果。
-
-消息内容：{text}
-
-意图类型：
-- todo：需要完成的任务/待办事项
-- reminder：需要在特定时间提醒的事项
-- idea：想法/灵感/创意
-- journal：工作记录/日记/碎碎念
-- project：项目相关/需求/计划
-
-请以 JSON 格式返回：
-{{
-  "intent": "意图类型",
-  "summary": "一句话概括核心内容",
-  "tags": ["标签1", "标签2"],
-  "reminder_time": "提醒时间，格式 YYYY-MM-DD HH:MM，如果没有请填 null",
-  "action_items": ["可执行的待办事项列表，如果没有请填空数组"]
-}}
-
-只返回 JSON，不要有其他内容。"""
-
-    try:
-        if AI_PROVIDER == "anthropic":
-            result_text = call_anthropic_api(AI_BASE_URL, AI_API_KEY, AI_MODEL, prompt)
-        elif AI_PROVIDER == "openai":
-            result_text = call_openai_api(AI_BASE_URL, AI_API_KEY, AI_MODEL, prompt)
-        else:
-            raise ValueError(f"不支持的 AI Provider: {AI_PROVIDER}")
-
-        # 提取 JSON（过滤 thinking block 和非 JSON 内容）
-        import re
-        json_match = re.search(r'\{[\s\S]*\}', result_text)
-        if json_match:
-            result_text = json_match.group()
-        return json.loads(result_text)
-    except Exception as e:
-        print(f"AI 分类失败: {e}")
-        return {
-            "intent": detect_intent(text),
-            "summary": text[:50],
-            "tags": [],
-            "reminder_time": parse_reminder_time(text),
-            "action_items": [],
-        }
 
 
 def get_vault_path(sub_dir: str, filename: str = None) -> Path:
@@ -197,15 +133,6 @@ def parse_reminder_time(text: str) -> Optional[str]:
     return None
 
 
-def extract_text_from_response(response) -> str:
-    """从 API 响应中提取纯文本，处理 ThinkingBlock"""
-    parts = []
-    for block in response.content:
-        if hasattr(block, 'text') and block.text:
-            parts.append(block.text)
-    return "\n".join(parts).strip()
-
-
 def ai_classify(text: str) -> dict:
     """用 AI 精准理解消息意图"""
     if not AI_API_KEY:
@@ -246,7 +173,14 @@ def ai_classify(text: str) -> dict:
             result_text = call_anthropic_api(AI_BASE_URL, AI_API_KEY, AI_MODEL, prompt)
         elif AI_PROVIDER == "openai":
             result_text = call_openai_api(AI_BASE_URL, AI_API_KEY, AI_MODEL, prompt)
+        else:
+            raise ValueError(f"不支持的 AI Provider: {AI_PROVIDER}")
 
+        # 提取 JSON
+        import re
+        json_match = re.search(r'\{[\s\S]*\}', result_text)
+        if json_match:
+            result_text = json_match.group()
         return json.loads(result_text)
     except Exception as e:
         print(f"AI 分类失败: {e}")
