@@ -25,8 +25,10 @@ import lark_oapi.ws.client as ws_client_module
 
 from config import (
     FEISHU_APP_ID, FEISHU_APP_SECRET, FEISHU_BOT_NAME,
-    VAULT_PATH, AI_PROVIDER, AI_API_KEY, NVIDIA_API_KEY, AI_MODEL, AI_BASE_URL, DIRS
+    VAULT_PATH, AI_PROVIDER, AI_API_KEY, NVIDIA_API_KEY, AI_MODEL, AI_BASE_URL, DIRS,
+    STATE_FILE
 )
+from apple_reminders import add_reminder
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -65,10 +67,12 @@ def call_nvidia_api(base_url: str, api_key: str, model: str, prompt: str, max_to
         "messages": [{"role": "user", "content": prompt}]
     }
 
-    resp = httpx.post(url, headers=headers, json=payload, timeout=60)
+    resp = httpx.post(url, headers=headers, json=payload, timeout=120)
     resp.raise_for_status()
     data = resp.json()
-    return data["choices"][0]["message"]["content"]
+    msg = data["choices"][0]["message"]
+    # 优先 content，其次 reasoning_content（glm/腾讯等模型用这个）
+    return msg.get("content") or msg.get("reasoning_content") or ""
 
 
 def call_anthropic_api(base_url: str, api_key: str, model: str, prompt: str, max_tokens: int = 1024) -> str:
@@ -140,8 +144,8 @@ def detect_intent(text: str) -> str:
     """检测消息意图（无 API 时备用）"""
     text_lower = text.lower()
     keywords = {
-        "todo": ["待办", "todo", "要做", "记得", "任务", "完成", "去做"],
-        "reminder": ["提醒", "记得", "几点", "几点钟", "时间"],
+        "todo": ["待办", "todo", "要做", "记得", "任务", "完成", "去做", "完成"],
+        "reminder": ["提醒", "记得", "几点", "时间", "记住", "别忘了", "提醒我", "提醒她"],
         "idea": ["想法", "灵感", "构思", "思路", "创意", "idea"],
         "journal": ["记录", "日记", "碎碎念", "今天", "这周", "工作"],
         "project": ["项目", "需求", "功能", "改版", "计划"],
@@ -155,6 +159,10 @@ def detect_intent(text: str) -> str:
 
 def parse_reminder_time(text: str) -> Optional[str]:
     """从文本中解析提醒时间"""
+    import datetime
+    now = datetime.datetime.now(pytz.timezone('Asia/Shanghai'))
+
+    # 模式：今天/明天/周一... + 几点
     patterns = [
         (r'今天(\d+)点', 0),
         (r'明天(\d+)点', 1),
@@ -166,7 +174,6 @@ def parse_reminder_time(text: str) -> Optional[str]:
         (r'周日(\d+)点', 6),
         (r'周一(\d+)点', 7),
     ]
-    now = datetime.datetime.now(pytz.timezone('Asia/Shanghai'))
     for pattern, days_offset in patterns:
         m = re.search(pattern, text)
         if m:
@@ -174,6 +181,35 @@ def parse_reminder_time(text: str) -> Optional[str]:
             target = now + datetime.timedelta(days=days_offset)
             target = target.replace(hour=hour, minute=0, second=0)
             return target.strftime("%Y-%m-%d %H:%M")
+
+    # 模式：下午/上午/晚上 + HH:MM 或 HH点MM分
+    time_patterns = [
+        (r'下午(\d{1,2}):(\d{2})', 0),   # 下午13:30
+        (r'下午(\d+)点(\d*)/?(\d*)分?', 0),  # 下午1点30分 / 下午13点
+        (r'上午(\d{1,2}):(\d{2})', 0),   # 上午09:30
+        (r'上午(\d+)点(\d*)/?(\d*)分?', 0),  # 上午9点30分
+        (r'晚上(\d{1,2}):(\d{2})', 0),   # 晚上20:00
+        (r'晚上(\d+)点(\d*)/?(\d*)分?', 0),  # 晚上8点
+        (r'(\d{1,2}):(\d{2})', 0),       # 13:30（无前缀，视为当天）
+    ]
+    for pattern, _ in time_patterns:
+        m = re.search(pattern, text)
+        if m:
+            hour = int(m.group(1))
+            minute = int(m.group(2)) if m.group(2) else 0
+            # 处理下午时间（12小时制转24小时）
+            if '下午' in text and hour < 12:
+                hour += 12
+            elif '上午' in text and hour == 12:
+                hour = 0
+            elif '晚上' in text and hour < 12:
+                hour += 12
+            target = now.replace(hour=hour, minute=minute, second=0)
+            # 如果时间已过，默认明天
+            if target <= now:
+                target += datetime.timedelta(days=1)
+            return target.strftime("%Y-%m-%d %H:%M")
+
     return None
 
 
@@ -543,11 +579,34 @@ def on_message_receive(data: P2ImMessageReceiveV1):
         # 保存到 Obsidian
         saved_path = save_to_obsidian(intent, text, ai_result)
 
+        # 同步到苹果提醒（待办/提醒类）
+        reminder_msg = ""
+        if intent in ("todo", "reminder"):
+            due = ai_result.get("reminder_time")
+            # 用户看到的提示用原始时间
+            date_tip = f"，到期 {due}" if due else ""
+            # 苹果提醒时间：提前10分钟，这样才有意义
+            remind_at = None
+            if due:
+                import datetime
+                dt = datetime.datetime.strptime(due, "%Y-%m-%d %H:%M")
+                dt -= datetime.timedelta(minutes=10)
+                remind_at = dt.strftime("%Y-%m-%d %H:%M")
+            rem = add_reminder(
+                title=ai_result.get("summary", text[:50]),
+                due_date=remind_at,
+                list_name="提醒"
+            )
+            if rem["success"]:
+                reminder_msg = f" ✅ 已同步到苹果提醒（提前10分钟）{date_tip}"
+            else:
+                reminder_msg = f" ⚠️ 苹果提醒同步失败：{rem['output']}"
+
         # 回复
-        reply_text = build_reply_text(intent, ai_result)
+        reply_text = build_reply_text(intent, ai_result) + reminder_msg
         send_reply(message.message_id, reply_text)
 
-        print(f"完成: {intent} → {saved_path}")
+        print(f"完成: {intent} → {saved_path}{reminder_msg}")
 
     except Exception as e:
         print(f"处理消息失败: {e}")

@@ -3,6 +3,7 @@ Hermes-Obsidian Bot 配置
 """
 
 import os
+from dotenv import load_dotenv
 
 load_dotenv()  # 加载 .env 环境变量（放在最前面）
 
